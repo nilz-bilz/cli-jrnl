@@ -29,6 +29,11 @@ bash jrnl-setup.sh
 
 > The keyword `jrnl` will be added to your .bashrc or .zshrc to run this script from the .jrnl/ folder
 
+After the setup, restart the terminal or:
+```bash
+source ~/.bashrc #replace with ~/.zshrc for zsh
+``` 
+
 ### Usage
 For creating a current entry:
 ```bash
