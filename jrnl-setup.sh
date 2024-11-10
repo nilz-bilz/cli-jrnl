@@ -8,27 +8,45 @@ echo "Setting up the journal script..."
 JRNL_DIR="$HOME/.jrnl"
 mkdir -p "$JRNL_DIR"  # Create the .jrnl directory in the home directory if it doesn’t exist
 
-# Prompt for encryption password
-read -sp "Enter the password for file encryption: " ENCRYPTION_PASSWORD
-echo
+# Load existing configuration from .env if it exists
+ENV_FILE="$JRNL_DIR/.env"
+if [[ -f "$ENV_FILE" ]]; then
+  source "$ENV_FILE"
+fi
 
-# Prompt for the directory to store journal files
-read -p "Enter the directory where journal files should be stored: " FILES_DIRECTORY
+# Prompt for encryption password (hidden input), showing existing if available
+read -sp "Enter the password for file encryption (leave blank to keep existing): " ENCRYPTION_PASSWORD
+echo
+if [[ -z "$ENCRYPTION_PASSWORD" && -n "$GPG_PASSWORD" ]]; then
+  ENCRYPTION_PASSWORD="$GPG_PASSWORD"  # Use existing password if user presses Enter
+fi
+
+# Prompt for the directory to store journal files, showing existing if available
+read -p "Enter the directory where journal files should be stored [${FILES_DIRECTORY:-~/journal}]: " FILES_DIRECTORY
+FILES_DIRECTORY="${FILES_DIRECTORY:-$FILES_DIRECTORY}"  # Use existing value or default to ~/journal
 mkdir -p "$FILES_DIRECTORY"  # Create the directory if it doesn't exist
 
-# Prompt for time format (12-hour or 24-hour)
-read -p "Choose time format (12h or 24h): " TIME_FORMAT
+# Prompt for time format (12-hour or 24-hour), showing existing if available
+read -p "Choose time format (12h or 24h) [${TIME_FORMAT:-24h}]: " TIME_FORMAT
+TIME_FORMAT="${TIME_FORMAT:-$TIME_FORMAT}"  # Use existing or default to 24h
 if [[ "$TIME_FORMAT" != "12h" && "$TIME_FORMAT" != "24h" ]]; then
   echo "Invalid input. Defaulting to 24-hour format."
   TIME_FORMAT="24h"
 fi
 
-# Prompt for date format
+# Prompt for date format with existing value
 echo "Choose a date format for inside the file:"
 echo "1. YYYY-MM-DD"
 echo "2. DD-MM-YYYY"
 echo "3. MM-DD-YYYY"
-read -p "Enter the number of your preferred date format (1, 2, or 3): " DATE_OPTION
+case "$DATE_FORMAT" in
+  "+%Y-%m-%d") DEFAULT_DATE_OPTION=1 ;;
+  "+%d-%m-%Y") DEFAULT_DATE_OPTION=2 ;;
+  "+%m-%d-%Y") DEFAULT_DATE_OPTION=3 ;;
+  *) DEFAULT_DATE_OPTION=1 ;;
+esac
+read -p "Enter the number of your preferred date format (1, 2, or 3) [${DEFAULT_DATE_OPTION}]: " DATE_OPTION
+DATE_OPTION="${DATE_OPTION:-$DEFAULT_DATE_OPTION}"  # Default to existing or fallback to 1
 
 # Set DATE_FORMAT based on the user's choice
 case "$DATE_OPTION" in
@@ -47,14 +65,11 @@ case "$DATE_OPTION" in
     ;;
 esac
 
-# Prompt for preferred text editor
-read -p "Choose your preferred text editor (default: vim): " TEXT_EDITOR
-if [[ -z "$TEXT_EDITOR" ]]; then
-  TEXT_EDITOR="vim"  # Default to vim if no input is provided
-fi
+# Prompt for preferred text editor, showing existing value if available
+read -p "Choose your preferred text editor (default: ${TEXT_EDITOR:-vim}): " TEXT_EDITOR
+TEXT_EDITOR="${TEXT_EDITOR:-${TEXT_EDITOR:-vim}}"  # Default to existing or vim if not specified
 
 # Write configuration to a .env file in the .jrnl directory
-ENV_FILE="$JRNL_DIR/.env"
 echo "Writing configuration to ${ENV_FILE}..."
 
 cat > "$ENV_FILE" <<EOL
