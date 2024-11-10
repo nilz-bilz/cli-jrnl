@@ -59,7 +59,7 @@ while [[ "$#" -gt 0 ]]; do
       fi
 
       # Step 1: List available years
-      mapfile -t years < <(find "$FILES_DIRECTORY" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+      mapfile -t years < <(find "$FILES_DIRECTORY" -mindepth 1 -maxdepth 1 -type d -not -path '*/.*' -exec basename {} \; | sort)
       if [[ ${#years[@]} -eq 0 ]]; then
         echo "No journal entries found."
         exit 1
