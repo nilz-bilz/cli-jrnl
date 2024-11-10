@@ -176,10 +176,10 @@ echo -e "DATE: $DATE\nTIME: $TIME\n\n" > "$TEMP_FILE"
 # Record the initial checksum of the file
 INITIAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
 
-# Open file in Vim at line 3
-vim +4 "$TEMP_FILE"
+# Open file with the specified editor at line 3
+$TEXT_EDITOR +4 "$TEMP_FILE"
 
-# Check if changes were made in Vim by comparing checksums
+# Check if changes were made by comparing checksums
 FINAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
 
 if [ "$INITIAL_CHECKSUM" != "$FINAL_CHECKSUM" ]; then
