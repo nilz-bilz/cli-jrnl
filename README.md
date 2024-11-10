@@ -71,6 +71,9 @@ Enter the number of the file you wish to open:
 
 ## Backing up
 You must backup the following:
+
 `~/.jrnl` folder that contains the main script and .env
+
 `~/.gnupg` folder that holds the encryption keys
+
 The actual destination folder where your entries are stored
