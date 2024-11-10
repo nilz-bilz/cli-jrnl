@@ -22,9 +22,12 @@ if [[ -z "$ENCRYPTION_PASSWORD" && -n "$GPG_PASSWORD" ]]; then
 fi
 
 # Prompt for the directory to store journal files, showing existing if available
-read -p "Enter the directory where journal files should be stored [${FILES_DIRECTORY:-~/journal}]: " FILES_DIRECTORY
-FILES_DIRECTORY="${FILES_DIRECTORY:-$FILES_DIRECTORY}"  # Use existing value or default to ~/journal
-mkdir -p "$FILES_DIRECTORY"  # Create the directory if it doesn't exist
+default_dir="/home/$USER/journal"
+read -p "Enter the directory where journal files should be stored [${FILES_DIRECTORY:-$default_dir}]: " input_files_dir
+FILES_DIRECTORY="${input_files_dir:-${FILES_DIRECTORY:-$default_dir}}"  # Use input if provided, otherwise keep existing or default to /home/$USER/journal
+
+# Ensure the directory exists or create it
+mkdir -p "$FILES_DIRECTORY"
 
 # Prompt for time format (12-hour or 24-hour), showing existing if available
 read -p "Choose time format (12h or 24h) [${TIME_FORMAT:-24h}]: " TIME_FORMAT
