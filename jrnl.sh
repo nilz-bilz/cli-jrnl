@@ -137,7 +137,7 @@ echo -e "DATE: $DATE\nTIME: $TIME\n\n" > "$TEMP_FILE"
 INITIAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
 
 # Open file in Vim at line 3
-vim +3 "$TEMP_FILE"
+vim +4 "$TEMP_FILE"
 
 # Check if changes were made in Vim by comparing checksums
 FINAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
