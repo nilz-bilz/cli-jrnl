@@ -68,3 +68,9 @@ Available journal files for 2024-2024-11:
 4. 2024-11-10T15:30:14.txt.gpg
 Enter the number of the file you wish to open: 
 ```
+
+## Backing up
+You must backup the following:
+`~/.jrnl` folder that contains the main script and .env
+`~/.gnupg` folder that holds the encryption keys
+The actual destination folder where your entries are stored
