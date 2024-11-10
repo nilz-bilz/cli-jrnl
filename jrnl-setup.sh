@@ -47,6 +47,12 @@ case "$DATE_OPTION" in
     ;;
 esac
 
+# Prompt for preferred text editor
+read -p "Choose your preferred text editor (default: vim): " TEXT_EDITOR
+if [[ -z "$TEXT_EDITOR" ]]; then
+  TEXT_EDITOR="vim"  # Default to vim if no input is provided
+fi
+
 # Write configuration to a .env file in the .jrnl directory
 ENV_FILE="$JRNL_DIR/.env"
 echo "Writing configuration to ${ENV_FILE}..."
@@ -57,11 +63,12 @@ GPG_PASSWORD="${ENCRYPTION_PASSWORD}"
 FILES_DIRECTORY="${FILES_DIRECTORY}"
 TIME_FORMAT="${TIME_FORMAT}"
 DATE_FORMAT="${DATE_FORMAT}"
+TEXT_EDITOR="${TEXT_EDITOR}"
 EOL
 
-# Copy and overwrite the main journal script to the .jrnl directory
+# Copy the main journal script to the .jrnl directory
 SCRIPT_SOURCE_DIR="$(pwd)"
-cp -f "$SCRIPT_SOURCE_DIR/jrnl.sh" "$JRNL_DIR/jrnl.sh"  # -f flag to force overwrite
+cp -f "$SCRIPT_SOURCE_DIR/journal.sh" "$JRNL_DIR/journal.sh"  # -f flag to force overwrite
 
 # Setup alias in .bashrc or .zshrc
 if [[ -n "$ZSH_VERSION" ]]; then
@@ -74,7 +81,7 @@ fi
 sed -i '/alias jrnl=/d' "$SHELL_RC"
 
 # Add the new alias to the shell configuration file
-echo "alias jrnl='bash $JRNL_DIR/jrnl.sh'" >> "$SHELL_RC"
+echo "alias jrnl='bash $JRNL_DIR/journal.sh'" >> "$SHELL_RC"
 
 # Display summary of configuration
 echo "Configuration completed successfully."
@@ -83,7 +90,7 @@ echo "  Encryption Password: [hidden]"
 echo "  Files Directory: $FILES_DIRECTORY"
 echo "  Time Format: $TIME_FORMAT"
 echo "  Date Format: $DATE_FORMAT"
+echo "  Text Editor: $TEXT_EDITOR"
 echo "Alias 'jrnl' has been added to $SHELL_RC. Restart your terminal or source $SHELL_RC to use it."
 
 echo "Setup complete."
-

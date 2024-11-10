@@ -30,8 +30,8 @@ open_journal_file() {
   # Record the initial checksum to detect changes
   INITIAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
 
-  # Open the decrypted file in Vim
-  vim "$TEMP_FILE"
+  # Open the decrypted file with the specified text editor
+  $TEXT_EDITOR "$TEMP_FILE"
 
   # Check for changes by comparing checksums
   FINAL_CHECKSUM=$(md5sum "$TEMP_FILE" | awk '{ print $1 }')
