@@ -8,6 +8,9 @@ This program can also be used to store encrypted records for any other purpose.
 
 It uses symmetric AES256 encryption with GPG. The setup script will prompt you for the password.
 
+All files are stored in **ISO 8601** time and date format. 
+The program creates a hierarchical structure with folders for years, months,  and timestamped files. 
+
 ## Dependencies
 - bash
 - vim/nano (any cli text editor)
