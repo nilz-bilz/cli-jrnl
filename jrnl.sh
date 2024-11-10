@@ -3,7 +3,7 @@
 # Load configuration from the .env file in the .jrnl directory
 source "$HOME/.jrnl/.env"
 
-# Default values for date and time (use current date and time if not specified)
+# Default values for custom date and time (use current date and time if not specified)
 CUSTOM_DATE=""
 CUSTOM_TIME=""
 
@@ -52,20 +52,60 @@ open_journal_file() {
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --open|-o) # Open an existing journal file
-      # Ensure the journal directory exists and list available files
+      # Ensure the journal directory exists
       if [[ ! -d "$FILES_DIRECTORY" ]]; then
         echo "Journal directory '$FILES_DIRECTORY' does not exist."
         exit 1
       fi
 
-      # List .gpg files in the journal directory and prompt for selection
-      mapfile -t files < <(find "$FILES_DIRECTORY" -type f -name "*.gpg" | sort)
-      if [[ ${#files[@]} -eq 0 ]]; then
-        echo "No encrypted journal files found in $FILES_DIRECTORY."
+      # Step 1: List available years
+      mapfile -t years < <(find "$FILES_DIRECTORY" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+      if [[ ${#years[@]} -eq 0 ]]; then
+        echo "No journal entries found."
         exit 1
       fi
 
-      echo "Available journal files:"
+      echo "Available years:"
+      for i in "${!years[@]}"; do
+        echo "$((i + 1)). ${years[$i]}"
+      done
+
+      read -p "Enter the number of the year you wish to select: " year_choice
+      if ! [[ "$year_choice" =~ ^[0-9]+$ ]] || (( year_choice < 1 || year_choice > ${#years[@]} )); then
+        echo "Invalid choice. Exiting."
+        exit 1
+      fi
+
+      SELECTED_YEAR="${years[$((year_choice - 1))]}"
+
+      # Step 2: List available months within the selected year
+      mapfile -t months < <(find "$FILES_DIRECTORY/$SELECTED_YEAR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+      if [[ ${#months[@]} -eq 0 ]]; then
+        echo "No journal entries found for the year $SELECTED_YEAR."
+        exit 1
+      fi
+
+      echo "Available months for $SELECTED_YEAR:"
+      for i in "${!months[@]}"; do
+        echo "$((i + 1)). ${months[$i]}"
+      done
+
+      read -p "Enter the number of the month you wish to select: " month_choice
+      if ! [[ "$month_choice" =~ ^[0-9]+$ ]] || (( month_choice < 1 || month_choice > ${#months[@]} )); then
+        echo "Invalid choice. Exiting."
+        exit 1
+      fi
+
+      SELECTED_MONTH="${months[$((month_choice - 1))]}"
+
+      # Step 3: List available files within the selected month
+      mapfile -t files < <(find "$FILES_DIRECTORY/$SELECTED_YEAR/$SELECTED_MONTH" -type f -name "*.gpg" | sort)
+      if [[ ${#files[@]} -eq 0 ]]; then
+        echo "No journal entries found for $SELECTED_YEAR-$SELECTED_MONTH."
+        exit 1
+      fi
+
+      echo "Available journal files for $SELECTED_YEAR-$SELECTED_MONTH:"
       for i in "${!files[@]}"; do
         echo "$((i + 1)). ${files[$i]##*/}"
       done
