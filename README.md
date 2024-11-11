@@ -16,7 +16,7 @@ The program creates a hierarchical structure with folders for years, months,  an
 - vim/nano (any cli text editor)
 - gpg (for encryption)
 
-### Setup:
+## Setup:
 ```bash
 git clone https://github.com/nilz-bilz/cli-jrnl.git
 ```
@@ -37,7 +37,7 @@ After the setup, restart the terminal or:
 source ~/.bashrc #replace with ~/.zshrc for zsh
 ``` 
 
-### Usage
+## Usage
 For creating a current entry:
 ```bash
 jrnl
@@ -45,12 +45,12 @@ jrnl
 
 For custom entry (past or future):
 ```bash
-jrnl -d 2024-09-09 -t 12:00pm
+jrnl --date 2024-09-09 --time 12:00pm
 ```
 
 To open files:
 ```bash
-jrnl -o
+jrnl --open
 ```
 
 This will allow you to navigate the journal directory:
@@ -72,6 +72,11 @@ Available journal files for 2024-2024-11:
 Enter the number of the file you wish to open: 
 ```
 
+For additional help:
+```bash
+jrnl --help
+```
+
 ## Backing up
 You must backup the following:
 
@@ -79,4 +84,4 @@ You must backup the following:
 
 `~/.gnupg` folder that holds the encryption keys
 
-The actual destination folder where your entries are stored
+The actual destination folder where your entries are stored [`~/journal` by default].
