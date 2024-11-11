@@ -22,9 +22,9 @@ if [[ -z "$ENCRYPTION_PASSWORD" && -n "$GPG_PASSWORD" ]]; then
 fi
 
 # Prompt for the directory to store journal files, showing existing if available
-default_dir="/home/$USER/journal"
+default_dir="$HOME/journal"
 read -p "Enter the directory where journal files should be stored [${FILES_DIRECTORY:-$default_dir}]: " input_files_dir
-FILES_DIRECTORY="${input_files_dir:-${FILES_DIRECTORY:-$default_dir}}"  # Use input if provided, otherwise keep existing or default to /home/$USER/journal
+FILES_DIRECTORY="${input_files_dir:-${FILES_DIRECTORY:-$default_dir}}"  # Use input if provided, otherwise keep existing or default to $HOME/journal
 
 # Ensure the directory exists or create it
 mkdir -p "$FILES_DIRECTORY"
