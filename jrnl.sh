@@ -3,6 +3,41 @@
 # Load configuration from the .env file in the .jrnl directory
 source "$HOME/.jrnl/.env"
 
+# Function to display help
+show_help() {
+  cat << EOF
+Usage: jrnl [OPTIONS]
+
+This script is a simple journaling tool that allows you to create encrypted journal entries,
+open and edit existing entries, and organize them by date.
+
+Options:
+  --open, -o           Open an existing journal entry. Prompts for year, month, and file.
+  --date, -d DATE      Specify a custom date for a new entry (format: YYYY-MM-DD).
+  --time, -t TIME      Specify a custom time for a new entry (format: HH:MM:SS).
+  --help, -h           Display this help message.
+
+Examples:
+  jrnl                    Create a new journal entry with the current date and time.
+  jrnl --date 2024-11-01  Create a new entry backdated to November 1, 2024.
+  jrnl --open             Open an existing entry. Select year, month, and file interactively.
+
+Configuration:
+  This script uses the configuration file at ~/.jrnl/.env to manage settings like the preferred
+  text editor, encryption password, file storage directory, and date/time format.
+
+Note:
+  You can re-run the setup script to change the configuration or reset defaults.
+EOF
+}
+
+# Check if --help or -h is used
+if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+  show_help
+  exit 0
+fi
+
+
 # Default values for custom date and time (use current date and time if not specified)
 CUSTOM_DATE=""
 CUSTOM_TIME=""
