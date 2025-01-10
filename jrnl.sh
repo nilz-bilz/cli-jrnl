@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Load configuration from the .env file in the .jrnl directory
 source "$HOME/.jrnl/.env"
