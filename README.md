@@ -2,7 +2,9 @@
 A command line journal inspired by https://github.com/jrnl-org/jrnl
 I wanted to have a minimal journaling system that would store my files encrypted, and be easy to setup across multiple devices without needing too many dependencies. 
 
-The whole program is written in 2 simple bash scripts. I wanted this app to function on practically any UNIX system with minimal configuration, and be able to rely on it years later, even when the app hasn't been worked on much.
+The whole program is written in 2 simple bash scripts. I wanted this app to function on most Linux/UNIX based systems with minimal configuration, and be able to rely on it years later, even when the app hasn't been worked on much.
+
+Hence the app tries to rely solely on minimal and popular packages that come bundled with most distributions, such as bash, gpg, and popular text editors like nano or vim/vi.
 
 This program can also be used to store encrypted records for any other purpose.
 
